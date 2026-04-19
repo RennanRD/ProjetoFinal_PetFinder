@@ -1,6 +1,6 @@
 # Data (não subir ao Git — ficheiros pesados)
 data/
-!data/README.md
+
 
 # Modelos treinados
 results/*.h5
