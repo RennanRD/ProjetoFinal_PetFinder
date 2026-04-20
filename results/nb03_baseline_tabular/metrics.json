@@ -1,0 +1,35 @@
+{
+  "model": "LightGBM",
+  "modality": "tabular",
+  "n_features": 50,
+  "n_trees": 84,
+  "hyperparameters": {
+    "objective": "binary",
+    "metric": "binary_logloss",
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "min_child_samples": 20,
+    "feature_fraction": 0.9,
+    "bagging_fraction": 0.9,
+    "bagging_freq": 5,
+    "verbose": -1,
+    "random_state": 42
+  },
+  "val_metrics": {
+    "accuracy": 0.6214524207011686,
+    "precision": 0.6193910256410257,
+    "recall": 0.64149377593361,
+    "f1": 0.6302486750917244,
+    "roc_auc": 0.6758054008103653,
+    "pr_auc": 0.6515526232417702
+  },
+  "val_confusion_matrix": {
+    "tn": 716,
+    "fp": 475,
+    "fn": 432,
+    "tp": 773
+  },
+  "threshold_used": 0.5,
+  "best_val_logloss": 0.6442977873028389,
+  "best_train_logloss": 0.5753726648699995
+}
