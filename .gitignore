@@ -1,6 +1,10 @@
 # Data (não subir ao Git — ficheiros pesados)
-data/
+data/*
 
+# Exceções: labels auxiliares são pequenos e necessários para reproduzir o pipeline
+!data/breed_labels.csv
+!data/color_labels.csv
+!data/state_labels.csv
 
 # Modelos treinados
 results/*.h5
