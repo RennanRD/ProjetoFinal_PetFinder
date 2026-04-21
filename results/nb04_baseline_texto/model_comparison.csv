@@ -1,0 +1,4 @@
+model,architecture,alpha,n_iter,roc_auc_train,roc_auc_val,gap,is_final
+v1,"(128, 64)",0.0001,28,0.9588,0.5312,0.4275,False
+v2,"(64, 32)",0.01,16,0.6849,0.5464,0.1385,False
+v3,"(32,)",0.05,12,0.6008,0.5469,0.0539,True

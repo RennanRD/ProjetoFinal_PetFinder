@@ -1,0 +1,44 @@
+{
+  "notebook": "NB04",
+  "baseline_type": "text",
+  "final_model": "v3",
+  "architecture": {
+    "input_dim": 384,
+    "hidden_layers": [
+      32
+    ],
+    "activation": "relu",
+    "alpha_l2": 0.05
+  },
+  "training": {
+    "n_iter": 12,
+    "roc_auc_train": 0.6008
+  },
+  "validation_metrics": {
+    "accuracy": 0.5196,
+    "precision": 0.5297,
+    "recall": 0.3992,
+    "f1": 0.4553,
+    "roc_auc": 0.5469,
+    "pr_auc": 0.5361
+  },
+  "comparison_vs_nb03": {
+    "nb03_tabular_roc_auc": 0.6758,
+    "nb04_text_roc_auc": 0.5469,
+    "difference": -0.1289,
+    "conclusion": "Tabular supera texto isolado em ~0.13 ROC-AUC; confirma hipótese multimodal."
+  },
+  "key_findings": [
+    "Testadas 3 configuracoes de MLP com regularizacao progressivamente mais forte.",
+    "v1 (alpha=1e-4) sofreu overfitting severo: train 0.96 vs val 0.53, gap +0.43.",
+    "v2 (alpha=1e-2) e v3 (alpha=5e-2) convergiram ambas para ROC-AUC val ~0.55.",
+    "Teto do sinal generalizavel do texto isolado estimado em ~0.55 ROC-AUC.",
+    "Hipotese: sinal no texto e fortemente dependente do estilo do RescuerID, que nao generaliza entre splits.",
+    "v3 escolhido como final por ter o menor gap train-val (+0.05) -> mais robusto para a fusao no NB06."
+  ],
+  "notes_for_nb06": [
+    "Usar test_predictions.parquet[y_proba] como feature de entrada do ramo texto.",
+    "Nao usar y_pred de val_predictions.parquet: threshold deve ser decidido apos fusao.",
+    "Modelo mlp_v3.joblib pode ser recarregado com joblib.load() se necessario."
+  ]
+}
