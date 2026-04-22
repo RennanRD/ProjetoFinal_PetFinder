@@ -1,0 +1,5 @@
+Baseline,Framework,Input dim,ROC-AUC val,ROC-AUC test,PR-AUC val,Notes
+NB03 Tabular (LightGBM),LightGBM,50,,,,"Top features: Age_log, Breed1=Mixed, Sterilized"
+NB04 Texto (sklearn MLP),sklearn MLP,384,,,,Teto de sinal ~0.55; std probas = 0.043 (modelo tímido)
+NB05 Imagem (sklearn MLP),sklearn MLP,1280,,,,Supera texto em todas as métricas; 341 sem foto são grupo degenerado
+NB06 Multimodal (Modelo A),sklearn MLP,3,0.678537858280116,0.6795264726918395,0.6488543508023696,Fusão pura de 3 probas; ranking + tiers (não binário)

@@ -1,0 +1,98 @@
+{
+  "notebook": "06_multimodal",
+  "official_model": "Model A \u2014 fusion of 3 probabilities",
+  "framework": "sklearn MLPClassifier",
+  "methodology": {
+    "fusion_inputs": "proba_tab (NB03), proba_text (NB04), proba_img (NB05)",
+    "train_set_of_fusion": "val set (2396 animals) \u2014 to avoid leakage",
+    "test_set": "test set (2997 animals) \u2014 single final evaluation",
+    "model_selection": "5-fold stratified CV; best config by mean ROC-AUC",
+    "final_architecture": {
+      "hidden_layer_sizes": [
+        4
+      ],
+      "alpha": 0.05
+    },
+    "final_iterations": 49,
+    "output_approach": "ranking with tiers (High/Medium/Low) \u2014 binary threshold rejected due to narrow P(slow) range"
+  },
+  "models_tested": {
+    "A": {
+      "inputs": "3 probas",
+      "cv_auc": 0.6819041997256896,
+      "test_auc": 0.6795264726918395,
+      "gap_val_test": -0.0009886144117234874,
+      "status": "OFFICIAL"
+    },
+    "B": {
+      "inputs": "3 probas + 50 tabular",
+      "cv_auc": 0.6787712817726617,
+      "test_auc": 0.64090029330476,
+      "gap_val_test": 0.09686461710561389,
+      "status": "rejected (overfit)"
+    },
+    "B2": {
+      "inputs": "2 probas + 50 tabular (no proba_tab)",
+      "cv_auc": 0.669235810437302,
+      "test_auc": 0.6301874994989859,
+      "gap_val_test": 0.14872209563185368,
+      "status": "rejected (overfit worsened)"
+    },
+    "B3": {
+      "inputs": "3 probas + 50 tabular, alpha=5.0",
+      "cv_auc": 0.6773476897139175,
+      "test_auc": 0.6563239552409632,
+      "gap_val_test": 0.08880810366556613,
+      "status": "rejected (overfit persists)"
+    }
+  },
+  "final_metrics_model_A": {
+    "val": {
+      "roc_auc": 0.678537858280116,
+      "pr_auc": 0.6488543508023696
+    },
+    "test": {
+      "roc_auc": 0.6795264726918395,
+      "pr_auc": 0.6554830875365935
+    },
+    "ranking_metrics_test": {
+      "precision_at_50": 0.8,
+      "precision_at_100": 0.79,
+      "precision_at_200": 0.76,
+      "precision_at_500": 0.758,
+      "precision_at_1000": 0.7
+    },
+    "tier_metrics_test": {
+      "High": {
+        "n": 618,
+        "pct_slow": 0.7394822006472492,
+        "lift": 1.4864038600535252
+      },
+      "Medium": {
+        "n": 770,
+        "pct_slow": 0.5571428571428572,
+        "lift": 1.1198907732106929
+      },
+      "Low": {
+        "n": 1609,
+        "pct_slow": 0.37600994406463645,
+        "lift": 0.755802684347227
+      }
+    }
+  },
+  "complementarity_analysis": {
+    "correlation_tab_img": 0.422,
+    "correlation_tab_text": 0.328,
+    "correlation_text_img": 0.247,
+    "oracle_upper_bound_accuracy": 0.862,
+    "best_individual_accuracy": 0.621,
+    "theoretical_gain_space_pp": 24.1
+  },
+  "key_findings": [
+    "Fusion of 3 probabilities (Model A) generalizes cleanly: gap val-test = -0.001",
+    "Enriching with raw tabular features (Models B, B2, B3) consistently overfits \u2014 distribution shift between val and test in raw features, not captured by regularization",
+    "Narrow P(slow) range [0.43, 0.53] makes binary thresholding degenerate; ranking approach is more honest",
+    "Tier High (top 20%) achieves 74% precision \u2014 1.49x lift over random selection",
+    "Simpson's paradox detected: Sterilized correlates with slow adoption marginally but accelerates it conditionally (confounded by Age)"
+  ]
+}

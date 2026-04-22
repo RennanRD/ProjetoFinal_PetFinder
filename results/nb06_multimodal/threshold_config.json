@@ -1,0 +1,15 @@
+{
+  "best_threshold_slow": 0.3,
+  "best_threshold_fast": 0.7,
+  "optimization_metric": "fbeta_score (beta=2)",
+  "target_class": "slow (AdoptionFast=0)",
+  "chosen_on_set": "val (train da fus\u00e3o)",
+  "val_metrics": {
+    "threshold_fast": 0.7,
+    "threshold_slow": 0.3,
+    "precision_slow": 0.49707846410684475,
+    "recall_slow": 1.0,
+    "f1_slow": 0.664064678003903,
+    "fbeta2_slow": 0.8317039106145251
+  }
+}
