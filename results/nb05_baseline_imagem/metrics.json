@@ -1,0 +1,96 @@
+{
+  "notebook": "05_baseline_imagem",
+  "target": "AdoptionFast (binário)",
+  "input_embedding": {
+    "source": "MobileNetV2 (pré-calculado no NB02)",
+    "dim": 1280,
+    "cache_file": "data/cache/image_embeddings_mobilenetv2.npy"
+  },
+  "framework": "sklearn.neural_network.MLPClassifier",
+  "framework_choice_rationale": "Consistência com NB04 (mesma framework) e conflito de dependências TF 2.16 vs pandas 3.x não resolvido. Fine-tuning em Keras fica para uma eventual v2 do ramo imagem.",
+  "models_compared": [
+    {
+      "id": "v1",
+      "hidden_layers": "(128, 64)",
+      "alpha": 0.0001,
+      "n_iter": 33,
+      "roc_auc_train": 0.7218,
+      "roc_auc_val": 0.6301,
+      "gap_train_val": 0.0917,
+      "train_time_sec": 1.42
+    },
+    {
+      "id": "v2",
+      "hidden_layers": "(64, 32)",
+      "alpha": 0.01,
+      "n_iter": 33,
+      "roc_auc_train": 0.7155,
+      "roc_auc_val": 0.6249,
+      "gap_train_val": 0.0906,
+      "train_time_sec": 0.85
+    },
+    {
+      "id": "v3",
+      "hidden_layers": "(32,)",
+      "alpha": 0.05,
+      "n_iter": 43,
+      "roc_auc_train": 0.85,
+      "roc_auc_val": 0.6235,
+      "gap_train_val": 0.2265,
+      "train_time_sec": 0.64
+    }
+  ],
+  "official_model": {
+    "id": "v2",
+    "reason": "Menor gap train-val (+0.0906) entre os modelos com ROC-AUC val próximo do topo. Critério consistente com o NB04.",
+    "val_metrics_threshold_0p5": {
+      "accuracy": 0.5897,
+      "precision": 0.6086,
+      "recall": 0.5162,
+      "f1": 0.5586,
+      "roc_auc": 0.6249,
+      "pr_auc": 0.6136
+    },
+    "confusion_matrix_val": {
+      "TN": 791,
+      "FP": 400,
+      "FN": 583,
+      "TP": 622
+    },
+    "test_metrics_log_only": {
+      "roc_auc": 0.6407,
+      "pr_auc": 0.6231
+    },
+    "val_test_generalization_gap": 0.0159
+  },
+  "zero_embedding_group": {
+    "expected_from_claude_md": "placeholder de zeros (341 animais, 2.27%)",
+    "actual_in_cache": "placeholder constante de norma L2 = 24.6350 (imagem em branco processada por MobileNetV2). Todos os 341 embeddings são idênticos entre si (std por dimensão = 0). Efeito estrutural equivalente ao vetor-zero: grupo degenerado memorizável.",
+    "distribution_across_splits": {
+      "train": 221,
+      "val": 56,
+      "test": 64
+    },
+    "target_by_group": {
+      "y_mean_with_photo_train": 0.5078,
+      "y_mean_without_photo_train": 0.2851,
+      "delta_pp": -22.3
+    },
+    "trivial_roc_auc_has_photo_only": 0.5118
+  },
+  "findings": [
+    "Ramo imagem supera ramo texto em todas as 6 métricas (ROC-AUC +0.078).",
+    "Ramo imagem aproxima-se do tabular (0.62 val vs 0.68 do NB03).",
+    "Teto de sinal identificado em ~0.62-0.63 ROC-AUC val: os 3 modelos convergem ao mesmo ponto com early stopping paciente (30 iter no_change) e agressivo (10). Aumentar paciência não desbloqueou performance — confirma teto real, não artefacto de convergência.",
+    "Modelo ligeiramente conservador em threshold=0.5: FN=583, FP=400 (razão 1.46, menos desequilibrado que NB04 v3 com razão 1.70). Threshold a otimizar no NB06.",
+    "Grupo degenerado dos 341 sem foto: y_mean=0.28 vs 0.51 global (diferença -22.3 pp), consistente com sinal has_photo identificado na EDA. Pico visível em proba_val ≈ 0.29 nos histogramas.",
+    "Alinhamento val-test excelente: |Δ ROC-AUC| = 0.0159. Confirma pipeline saudável."
+  ],
+  "notes_for_nb06": [
+    "Usar test_predictions.parquet[y_proba] como feature do ramo imagem.",
+    "Não usar y_pred do val_predictions: threshold só se decide após fusão.",
+    "Modelo recarregável com joblib.load(RESULTS_DIR / 'mlp_v2.joblib').",
+    "Considerar criar features explícitas 'is_no_photo' e 'is_no_text' no input do modelo multimodal, para o modelo não ter de re-descobrir o sinal dos grupos degenerados.",
+    "O gap de +0.09 no v2 é pequeno mas não nulo — vale monitorizar se o modelo multimodal sofre overfit similar na camada de fusão."
+  ]
+}
