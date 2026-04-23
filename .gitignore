@@ -32,3 +32,5 @@ __pycache__/
 
 # Ambientes
 *.egg-info/
+*_checkpoint.parquet
+*_checkpoint.parquet

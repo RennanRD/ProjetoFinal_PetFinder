@@ -1,0 +1,83 @@
+{
+  "batch_info": {
+    "model": "gemma3:4b",
+    "temperature": 0.4,
+    "n_target": 80,
+    "n_success": 80,
+    "n_errors": 0,
+    "success_rate": 1.0,
+    "total_time_seconds": 184.5,
+    "mean_time_per_animal": 2.3
+  },
+  "prompt_engineering": {
+    "n_iterations": 2,
+    "v1_issues": [
+      "invented specificity (e.g. 'left leg' from '1 leg')",
+      "softened medical severity (e.g. 'slightly dysfunctional')"
+    ],
+    "v2_fix": "added explicit 'NO ADDED SPECIFICITY OR QUALIFIERS' section with concrete examples"
+  },
+  "length_stats": {
+    "original": {
+      "mean": 78.5,
+      "median": 59.5,
+      "min": 7,
+      "max": 381
+    },
+    "rewritten": {
+      "mean": 61.9,
+      "median": 59.5,
+      "min": 35,
+      "max": 102
+    },
+    "compression_ratio": {
+      "mean": 1.66,
+      "median": 1.12
+    }
+  },
+  "behavior_by_input_length": {
+    "1. Very short (<20)": {
+      "n": 13,
+      "original_mean_words": 10.54,
+      "rewritten_mean_words": 47.69,
+      "compression": 4.85
+    },
+    "2. Short (20-49)": {
+      "n": 26,
+      "original_mean_words": 33.62,
+      "rewritten_mean_words": 53.15,
+      "compression": 1.65
+    },
+    "3. Medium (50-99)": {
+      "n": 19,
+      "original_mean_words": 79.42,
+      "rewritten_mean_words": 64.0,
+      "compression": 0.82
+    },
+    "4. Long (100+)": {
+      "n": 22,
+      "original_mean_words": 170.86,
+      "rewritten_mean_words": 78.82,
+      "compression": 0.51
+    }
+  },
+  "outliers": {
+    "n_short_lt40": 5,
+    "n_long_gt120": 0,
+    "short_outliers_notes": "All 5 cases had input <30 words. Model expanded honestly using metadata without inventing facts."
+  },
+  "batch_composition": {
+    "n_dogs": 40,
+    "n_cats": 40,
+    "by_age_group": {
+      "young_adult": 28,
+      "puppy_kitten": 26,
+      "adult_senior": 26
+    }
+  },
+  "known_limitations": [
+    "Litter coherence: when original mentions multiple animals (Quantity>1), model sometimes singularizes. Prompt does not include Quantity field \u2014 addressable in future iteration.",
+    "Slight ungrammatical fragments on very short inputs (e.g. 'a fractured one leg') \u2014 tradeoff accepted vs risk of fact invention.",
+    "Batch covers rank 1-562 of tier High (not only top), chosen to ensure diversity; top-ranked animals could be processed separately if needed."
+  ]
+}
