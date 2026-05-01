@@ -1,0 +1,24 @@
+{
+  "approach": "ranking_with_tiers",
+  "rationale": "P(slow) range [0.43, 0.53] makes binary threshold degenerate; ranking leverages ROC-AUC=0.68",
+  "quota_high": 0.2,
+  "quota_medium": 0.5,
+  "cutoff_high": 0.519788028182438,
+  "cutoff_medium": 0.4778452913627351,
+  "cutoffs_set_on": "val (train da fus\u00e3o)",
+  "test_metrics": {
+    "precision_at_k": {
+      "50": 0.82,
+      "100": 0.8,
+      "200": 0.795,
+      "500": 0.762,
+      "1000": 0.699
+    },
+    "tier_prevalence": {
+      "High": 0.744,
+      "Medium": 0.563249001331558,
+      "Low": 0.37199259716224553
+    },
+    "base_prevalence": 0.4974974974974975
+  }
+}

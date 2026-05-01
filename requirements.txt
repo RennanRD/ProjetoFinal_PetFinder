@@ -1,0 +1,43 @@
+# =============================================================================
+# PetFinder Intelligence — requirements.txt
+# Python 3.11
+# =============================================================================
+# Notas:
+# - TensorFlow é OPCIONAL e não está aqui. Só é necessário para regenerar 
+#   embeddings de imagem do zero (ver README). Os embeddings estão em cache.
+# - Versões testadas no ambiente de desenvolvimento. Mais recentes 
+#   provavelmente funcionam, mas não foram testadas.
+
+# Core data science
+numpy>=2.0
+pandas>=2.2
+scikit-learn>=1.4
+scipy>=1.13
+
+# Machine Learning
+lightgbm>=4.3
+shap>=0.45
+
+# NLP / Embeddings
+sentence-transformers>=3.0
+torch>=2.2
+transformers>=4.40
+
+# Imagem (opcional, só para regenerar embeddings — ver README)
+# tensorflow==2.16   # requer numpy<2 num venv isolado
+Pillow>=10.0
+
+# Visualização
+matplotlib>=3.8
+seaborn>=0.13
+
+# Notebooks
+jupyter>=1.0
+ipykernel>=6.29
+ipywidgets>=8.0
+tqdm>=4.66
+
+# I/O e utilitários
+pyarrow>=15.0           # parquet
+joblib>=1.4
+requests>=2.31          # chamadas HTTP ao Ollama no NB07
